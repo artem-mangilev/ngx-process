@@ -1,13 +1,13 @@
 {
-  "name": "ngx-graph",
+  "name": "ngx-process",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:lib": "ng build @swimlane/ngx-graph",
-    "build:lib:prod": "ng build @swimlane/ngx-graph --configuration production",
+    "build:lib": "ng build ngx-process",
+    "build:lib:prod": "ng build ngx-process --configuration production",
     "test": "npm run lint",
     "lint": "ng lint",
     "e2e": "ng e2e",

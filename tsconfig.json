@@ -15,8 +15,8 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "paths": {
-      "@swimlane/ngx-graph": ["projects/swimlane/ngx-graph/src/public_api"],
-      "@swimlane/ngx-graph/*": ["projects/swimlane/ngx-graph/src/*"]
+      "ngx-process": ["projects/ngx-process/src/public_api"],
+      "ngx-process/*": ["projects/ngx-process/src/*"]
     }
   },
   "angularCompilerOptions": {

@@ -102,31 +102,31 @@
         }
       }
     },
-    "@swimlane/ngx-graph": {
-      "root": "projects/swimlane/ngx-graph",
-      "sourceRoot": "projects/swimlane/ngx-graph/src",
+    "ngx-process": {
+      "root": "projects/ngx-process",
+      "sourceRoot": "projects/ngx-process/src",
       "projectType": "library",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": "projects/swimlane/ngx-graph/tsconfig.lib.json",
-            "project": "projects/swimlane/ngx-graph/ng-package.json"
+            "tsConfig": "projects/ngx-process/tsconfig.lib.json",
+            "project": "projects/ngx-process/ng-package.json"
           },
           "configurations": {
             "production": {
-              "project": "projects/swimlane/ngx-graph/ng-package.prod.json",
-              "tsConfig": "projects/swimlane/ngx-graph/tsconfig.lib.prod.json"
+              "project": "projects/ngx-process/ng-package.prod.json",
+              "tsConfig": "projects/ngx-process/tsconfig.lib.prod.json"
             }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/swimlane/ngx-graph/src/test.ts",
-            "tsConfig": "projects/swimlane/ngx-graph/tsconfig.spec.json",
-            "karmaConfig": "projects/swimlane/ngx-graph/karma.conf.js"
+            "main": "projects/ngx-process/src/test.ts",
+            "tsConfig": "projects/ngx-process/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-process/karma.conf.js"
           }
         }
       }

@@ -1,10 +1,10 @@
 {
-  "name": "@swimlane/ngx-graph",
-  "version": "8.0.0",
-  "description": "Graph visualization for angular",
+  "name": "ngx-process",
+  "version": "0.1.0-beta.0",
+  "description": "Custom flowchart creation for Angular",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/swimlane/ngx-graph.git"
+    "url": "git+https://github.com/artem-mangilev/ngx-process"
   },
   "keywords": [
     "angular",
@@ -14,20 +14,10 @@
     "dataviz",
     "visualization",
     "tree",
-    "force-directed",
-    "directed acyclic graph",
-    "dag"
+    "flowchart"
   ],
-  "author": "Swimlane",
-  "maintainers": [
-    "Marjan Georgiev",
-    "Assaf Shemesh"
-  ],
+  "author": "Artem Mangilev",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/swimlane/ngx-graph/issues"
-  },
-  "homepage": "https://github.com/swimlane/ngx-graph#readme",
   "peerDependencies": {
     "@angular/animations": "10.x || 11.x || 12.x || 13.x",
     "@angular/common": "10.x || 11.x || 12.x || 13.x",
