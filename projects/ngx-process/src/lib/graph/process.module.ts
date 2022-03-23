@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
-import { GraphComponent } from './graph.component';
+import { ProcessComponent } from './process.component';
 import { MouseWheelDirective } from './mouse-wheel.directive';
 import { LayoutService } from './layouts/layout.service';
 import { CommonModule } from '@angular/common';
 import { VisibilityObserver } from '../utils/visibility-observer';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-export { GraphComponent };
+export { ProcessComponent };
 
 @NgModule({
   imports: [CommonModule, BrowserAnimationsModule],
-  declarations: [GraphComponent, MouseWheelDirective, VisibilityObserver],
-  exports: [GraphComponent, MouseWheelDirective],
+  declarations: [ProcessComponent, MouseWheelDirective, VisibilityObserver],
+  exports: [ProcessComponent, MouseWheelDirective],
   providers: [LayoutService]
 })
-export class GraphModule {}
+export class ProcessModule {}

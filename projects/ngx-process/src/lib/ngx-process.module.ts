@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GraphModule } from './graph/graph.module';
+import { ProcessModule } from './graph/process.module';
 
 @NgModule({
   imports: [CommonModule],
-  exports: [GraphModule]
+  exports: [ProcessModule]
 })
-export class NgxGraphModule {}
+export class NgxProcessModule {}

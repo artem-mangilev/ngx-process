@@ -54,9 +54,9 @@ export interface Matrix {
 }
 
 @Component({
-  selector: 'ngx-graph',
-  styleUrls: ['./graph.component.scss'],
-  templateUrl: 'graph.component.html',
+  selector: 'ngx-process',
+  styleUrls: ['./process.component.scss'],
+  templateUrl: 'process.component.html',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
@@ -65,7 +65,7 @@ export interface Matrix {
     ])
   ]
 })
-export class GraphComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
+export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   @Input() nodes: Node[] = [];
   @Input() clusters: ClusterNode[] = [];
   @Input() links: Edge[] = [];
