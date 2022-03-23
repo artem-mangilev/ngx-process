@@ -4,10 +4,11 @@ import { MouseWheelDirective } from './mouse-wheel.directive';
 import { LayoutService } from './layouts/layout.service';
 import { CommonModule } from '@angular/common';
 import { VisibilityObserver } from '../utils/visibility-observer';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export { GraphComponent };
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [CommonModule, BrowserAnimationsModule],
   declarations: [GraphComponent, MouseWheelDirective, VisibilityObserver],
   exports: [GraphComponent, MouseWheelDirective],
   providers: [LayoutService]
