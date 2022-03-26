@@ -13,12 +13,7 @@ export * from './lib/graph/process.component';
 export * from './lib/graph/process.module';
 
 export * from './lib/graph/mouse-wheel.directive';
-export * from './lib/graph/layouts/colaForceDirected';
-export * from './lib/graph/layouts/customLayouts';
-export * from './lib/graph/layouts/d3ForceDirected';
 export * from './lib/graph/layouts/dagre';
-export * from './lib/graph/layouts/dagreCluster';
-export * from './lib/graph/layouts/dagreNodesOnly';
 
 export * from './lib/enums/mini-map-position.enum';
 export * from './lib/enums/panning.enum';

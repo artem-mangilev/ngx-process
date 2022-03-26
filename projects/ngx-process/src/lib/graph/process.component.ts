@@ -40,6 +40,7 @@ import { throttleable } from '../utils/throttle';
 import { ColorHelper } from '../utils/color.helper';
 import { ViewDimensions, calculateViewDimensions } from '../utils/view-dimensions.helper';
 import { VisibilityObserver } from '../utils/visibility-observer';
+import { UserProvidedPositionLayout } from './layouts/user-provided-position-layout.service';
 
 /**
  * Matrix
@@ -92,7 +93,7 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
   @Input() center$: Observable<any>;
   @Input() zoomToFit$: Observable<any>;
   @Input() panToNode$: Observable<any>;
-  @Input() layout: string | Layout;
+  @Input() layout: 'dagre' | Layout | null = 'dagre';
   @Input() layoutSettings: any;
   @Input() enableTrackpadSupport = false;
   @Input() showMiniMap: boolean = false;
@@ -245,29 +246,29 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
       );
     }
 
+    this.setLayout(this.layout);
+
     this.minimapClipPathId = `minimapClip${id()}`;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.basicUpdate();
 
-    const { layout, layoutSettings, nodes, clusters, links } = changes;
-    this.setLayout(this.layout);
-    if (layoutSettings) {
-      this.setLayoutSettings(this.layoutSettings);
-    }
     this.update();
   }
 
-  setLayout(layout: string | Layout): void {
+  setLayout(layout: 'dagre' | Layout | null): void {
     this.initialized = false;
-    if (!layout) {
-      layout = 'dagre';
-    }
-    if (typeof layout === 'string') {
+
+    if (layout == null) {
+      this.layout = new UserProvidedPositionLayout();
+    } else if (typeof layout === 'string') {
       this.layout = this.layoutService.getLayout(layout);
-      this.setLayoutSettings(this.layoutSettings);
+    } else {
+      this.layout = layout;
     }
+
+    this.setLayoutSettings(this.layoutSettings);
   }
 
   setLayoutSettings(settings: any): void {
@@ -361,10 +362,7 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
       } else {
         n.meta.forceDimensions = n.meta.forceDimensions === undefined ? true : n.meta.forceDimensions;
       }
-      n.position = {
-        x: 0,
-        y: 0
-      };
+      n.position = n.position ? n.position : { x: 0, y: 0 };
       n.data = n.data ? n.data : {};
       return n;
     };
