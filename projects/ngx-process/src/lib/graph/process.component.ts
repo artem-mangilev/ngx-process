@@ -71,7 +71,10 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
   @Input() clusters: ClusterNode[] = [];
   @Input() links: Edge[] = [];
   @Input() activeEntries: any[] = [];
+
+  // TODO: default curve not working because generateLine() should get 3 points (not provided 2)
   @Input() curve: any = shape.curveBundle.beta(1);
+
   @Input() draggingEnabled = true;
   @Input() nodeHeight: number;
   @Input() nodeMaxHeight: number;
@@ -319,9 +322,6 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
    */
   update(): void {
     this.basicUpdate();
-    // if (!this.curve) {
-    //   this.curve = shape.curveBundle.beta(1);
-    // }
 
     this.zone.run(() => {
       this.dims = calculateViewDimensions({
