@@ -448,70 +448,15 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
       this.oldClusters = oldClusters;
     }, 500);
 
-    // Update the labels to the new positions
-    const newLinks = [];
-    for (const edgeLabelId in this.graph.edgeLabels) {
-      const edgeLabel = this.graph.edgeLabels[edgeLabelId];
+    for (const edge of this.graph.edges) {
+      const source = this.graph.nodes.find(node => node.id === edge.source);
+      const target = this.graph.nodes.find(node => node.id === edge.target);
 
-      const normKey = edgeLabelId.replace(/[^\w-]*/g, '');
+      const points = [source.position, target.position];
 
-      const isMultigraph =
-        this.layout && typeof this.layout !== 'string' && this.layout.settings && this.layout.settings.multigraph;
+      edge.line = this.generateLine(points);
 
-      let oldLink = isMultigraph
-        ? this._oldLinks.find(ol => `${ol.source}${ol.target}${ol.id}` === normKey)
-        : this._oldLinks.find(ol => `${ol.source}${ol.target}` === normKey);
-
-      const linkFromGraph = isMultigraph
-        ? this.graph.edges.find(nl => `${nl.source}${nl.target}${nl.id}` === normKey)
-        : this.graph.edges.find(nl => `${nl.source}${nl.target}` === normKey);
-
-      if (!oldLink) {
-        oldLink = linkFromGraph || edgeLabel;
-      } else if (
-        oldLink.data &&
-        linkFromGraph &&
-        linkFromGraph.data &&
-        JSON.stringify(oldLink.data) !== JSON.stringify(linkFromGraph.data)
-      ) {
-        // Compare old link to new link and replace if not equal
-        oldLink.data = linkFromGraph.data;
-      }
-
-      oldLink.oldLine = oldLink.line;
-
-      const points = edgeLabel.points;
-      const line = this.generateLine(points);
-
-      const newLink = Object.assign({}, oldLink);
-      newLink.line = line;
-      newLink.points = points;
-
-      this.updateMidpointOnEdge(newLink, points);
-
-      const textPos = points[Math.floor(points.length / 2)];
-      if (textPos) {
-        newLink.textTransform = `translate(${textPos.x || 0},${textPos.y || 0})`;
-      }
-
-      newLink.textAngle = 0;
-      if (!newLink.oldLine) {
-        newLink.oldLine = newLink.line;
-      }
-
-      this.calcDominantBaseline(newLink);
-      newLinks.push(newLink);
-    }
-
-    this.graph.edges = newLinks;
-
-    // Map the old links for animations
-    if (this.graph.edges) {
-      this._oldLinks = this.graph.edges.map(l => {
-        const newL = Object.assign({}, l);
-        newL.oldLine = l.line;
-        return newL;
-      });
+      this.updateMidpointOnEdge(edge, points);
     }
 
     this.updateMinimap();
