@@ -71,7 +71,7 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
   @Input() clusters: ClusterNode[] = [];
   @Input() links: Edge[] = [];
   @Input() activeEntries: any[] = [];
-  @Input() curve: any;
+  @Input() curve: any = shape.curveBundle.beta(1);
   @Input() draggingEnabled = true;
   @Input() nodeHeight: number;
   @Input() nodeMaxHeight: number;
@@ -319,9 +319,9 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
    */
   update(): void {
     this.basicUpdate();
-    if (!this.curve) {
-      this.curve = shape.curveBundle.beta(1);
-    }
+    // if (!this.curve) {
+    //   this.curve = shape.curveBundle.beta(1);
+    // }
 
     this.zone.run(() => {
       this.dims = calculateViewDimensions({
@@ -671,7 +671,7 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
    *
    * @memberOf GraphComponent
    */
-  generateLine(points: any): any {
+  generateLine(points: any): string {
     const lineFunction = shape
       .line<any>()
       .x(d => d.x)
