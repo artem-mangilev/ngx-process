@@ -33,7 +33,7 @@ export interface DagreSettings {
 }
 
 export class DagreLayout implements Layout {
-  defaultSettings: DagreSettings = {
+  settings: DagreSettings = {
     orientation: Orientation.LEFT_TO_RIGHT,
     marginX: 20,
     marginY: 20,
@@ -43,7 +43,6 @@ export class DagreLayout implements Layout {
     multigraph: true,
     compound: true
   };
-  settings: DagreSettings = {};
 
   dagreGraph: any;
   dagreNodes: any;
@@ -92,7 +91,7 @@ export class DagreLayout implements Layout {
   }
 
   createDagreGraph(graph: Graph): any {
-    const settings = Object.assign({}, this.defaultSettings, this.settings);
+    const settings = this.settings;
     this.dagreGraph = new dagre.graphlib.Graph({ compound: settings.compound, multigraph: settings.multigraph });
 
     this.dagreGraph.setGraph({

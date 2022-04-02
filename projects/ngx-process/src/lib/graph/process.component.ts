@@ -97,7 +97,6 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
   @Input() zoomToFit$: Observable<any>;
   @Input() panToNode$: Observable<any>;
   @Input() layout: 'dagre' | Layout | null = 'dagre';
-  @Input() layoutSettings: any;
   @Input() enableTrackpadSupport = false;
   @Input() showMiniMap: boolean = false;
   @Input() miniMapMaxWidth: number = 100;
@@ -269,14 +268,6 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
       this.layout = this.layoutService.getLayout(layout);
     } else {
       this.layout = layout;
-    }
-
-    this.setLayoutSettings(this.layoutSettings);
-  }
-
-  setLayoutSettings(settings: any): void {
-    if (this.layout && typeof this.layout !== 'string') {
-      this.layout.settings = settings;
     }
   }
 
