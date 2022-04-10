@@ -1,4 +1,4 @@
-export interface NodePosition {
+export interface Point {
   x: number;
   y: number;
 }
@@ -10,12 +10,18 @@ export interface NodeDimension {
 
 export interface Node {
   id: string;
-  position?: NodePosition;
+  position?: Point;
   dimension?: NodeDimension;
   transform?: string;
   label?: string;
   data?: any;
   meta?: any;
+  anchor: {
+    transform: {
+      input: string;
+      output: string;
+    };
+  };
 }
 
 export interface ClusterNode extends Node {

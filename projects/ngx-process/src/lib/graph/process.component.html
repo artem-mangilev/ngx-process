@@ -7,8 +7,9 @@
   (mouseWheelDown)="onZoom($event, 'out')"
   mouseWheel
 >
-  <svg:svg class="ngx-charts" [attr.width]="width" [attr.height]="height">
+  <svg:svg #svg class="ngx-charts" [attr.width]="width" [attr.height]="height">
     <svg:g
+      #svgChart
       *ngIf="initialized && graph"
       [attr.transform]="transform"
       (touchstart)="onTouchStart($event)"
@@ -32,6 +33,10 @@
         [attr.transform]="'translate(' + (-dims.width || 0) * 50 + ',' + (-dims.height || 0) * 50 + ')'"
         (mousedown)="isPanning = true"
       />
+
+      <svg:g class="transition-group">
+        <svg:path class="transition" marker-end="url(#transition-arrow)" [attr.d]="transitionPath"></svg:path>
+      </svg:g>
 
       <ng-content></ng-content>
 
@@ -97,6 +102,24 @@
             [attr.cy]="node.dimension.height / 2"
             [attr.fill]="node.data?.color"
           />
+
+          <ng-container *ngIf="enableTransition">
+            <svg:circle
+              *ngIf="node.anchor?.transform?.input"
+              r="6"
+              [attr.fill]="'red'"
+              [attr.stroke-width]="2"
+              [attr.transform]="node.anchor?.transform?.input"
+            />
+
+            <svg:circle
+              *ngIf="node.anchor?.transform?.output"
+              r="6"
+              [attr.fill]="'#2E62D9'"
+              [attr.transform]="node.anchor?.transform?.output"
+              (click)="onOutputAnchorClick(node)"
+            />
+          </ng-container>
         </svg:g>
       </svg:g>
     </svg:g>

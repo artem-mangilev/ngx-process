@@ -19,7 +19,8 @@ import {
   NgZone,
   ChangeDetectorRef,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import { select } from 'd3-selection';
 import * as shape from 'd3-shape';
@@ -31,7 +32,7 @@ import { identity, scale, smoothMatrix, toSVG, transform, translate } from 'tran
 import { Layout } from '../models/layout.model';
 import { LayoutService } from './layouts/layout.service';
 import { Edge } from '../models/edge.model';
-import { Node, ClusterNode } from '../models/node.model';
+import { Node, ClusterNode, Point } from '../models/node.model';
 import { Graph } from '../models/graph.model';
 import { id } from '../utils/id';
 import { PanningAxis } from '../enums/panning.enum';
@@ -76,6 +77,8 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
   @Input() curve: any = shape.curveBundle.beta(1);
 
   @Input() draggingEnabled = true;
+  @Input() enableTransition = true;
+
   @Input() nodeHeight: number;
   @Input() nodeMaxHeight: number;
   @Input() nodeMinHeight: number;
@@ -122,6 +125,9 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
   @ViewChildren('nodeElement') nodeElements: QueryList<ElementRef>;
   @ViewChildren('linkElement') linkElements: QueryList<ElementRef>;
 
+  @ViewChild('svg') svgElementRef: ElementRef<SVGSVGElement>;
+  @ViewChild('svgChart') svgChartElementRef: ElementRef<SVGGElement>;
+
   public chartWidth: any;
 
   private isMouseMoveCalled: boolean = false;
@@ -154,6 +160,11 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
   height: number;
   resizeSubscription: any;
   visibilityObserver: VisibilityObserver;
+
+  public transitionPath: string;
+
+  private _transitionNode: Node;
+  private _isTransitioning: boolean = false;
 
   constructor(
     private el: ElementRef,
@@ -260,8 +271,6 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
   }
 
   setLayout(layout: 'dagre' | Layout | null): void {
-    this.initialized = false;
-
     if (layout == null) {
       this.layout = new UserProvidedPositionLayout();
     } else if (typeof layout === 'string') {
@@ -355,6 +364,12 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
       }
       n.position = n.position ? n.position : { x: 0, y: 0 };
       n.data = n.data ? n.data : {};
+      n.anchor = {
+        transform: {
+          input: '',
+          output: ''
+        }
+      };
       return n;
     };
 
@@ -387,6 +402,11 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
     }
     // Calc view dims for the nodes
     this.applyNodeDimensions();
+
+    // Calc node anchors
+    if (this.enableTransition) {
+      this.applyAnchorPositions();
+    }
 
     // Recalc the layout
     const result = this.layout.run(this.graph);
@@ -928,6 +948,8 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
       this.panWithConstraints(this.panningAxis, $event);
     } else if (this.isDragging && this.draggingEnabled) {
       this.onDrag($event);
+    } else if (this.enableTransition && this._isTransitioning) {
+      this.handleTransition($event);
     }
   }
 
@@ -1099,6 +1121,11 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
     }
   }
 
+  public onOutputAnchorClick(node: Node): void {
+    this._transitionNode = node;
+    this._isTransitioning = true;
+  }
+
   private updateMidpointOnEdge(edge: Edge, points: any): void {
     if (!edge || !points) {
       return;
@@ -1179,5 +1206,36 @@ export class ProcessComponent implements OnInit, OnChanges, OnDestroy, AfterView
       }
     });
     this.resizeSubscription = subscription;
+  }
+
+  private applyAnchorPositions(): void {
+    for (const node of this.graph.nodes) {
+      const input = `translate(${0}, ${node.dimension?.height / 2})`;
+      const output = `translate(${node.dimension?.width}, ${node.dimension?.height / 2})`;
+
+      node.anchor.transform = { input, output };
+    }
+  }
+
+  private handleTransition(event: MouseEvent): void {
+    const outputX: number = this._transitionNode.position?.x + this._transitionNode.dimension?.width / 2;
+    const outputY: number = this._transitionNode.position?.y;
+
+    const line = this.generateLine([
+      {
+        x: outputX,
+        y: outputY
+      },
+      this.documentPointToGraphPoint({ x: event.clientX, y: event.clientY })
+    ]);
+
+    this.transitionPath = line;
+  }
+
+  public documentPointToGraphPoint({ x, y }: Point): Point {
+    const point = this.svgElementRef.nativeElement.createSVGPoint();
+    point.x = x;
+    point.y = y;
+    return point.matrixTransform(this.svgChartElementRef.nativeElement.getScreenCTM().inverse());
   }
 }
